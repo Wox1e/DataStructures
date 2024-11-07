@@ -1,3 +1,5 @@
+#include <iostream>
+using namespace std;
 
 template <class T>
 class Node
@@ -66,6 +68,14 @@ private:
 	Node<T>* begin = nullptr;
 	Node<T>* end = nullptr;
 public:
+	LinkedList() {};
+	LinkedList(initializer_list<T> l)
+	{
+		for (T element : l)
+		{
+			this->push_back(element);
+		}
+	}
 	~LinkedList()
 	{
 		Node<T>* currentNode = this->begin;
@@ -170,7 +180,7 @@ public:
 		delete currentBegin;
 		return value;
 	}
-	void insert(T value, T index)
+	void insert(T value, int index)
 	{
 		if (index == 0)
 		{
@@ -207,6 +217,55 @@ public:
 		node->setNext(current_node);
 
 	}
+	void remove(int index)
+	{
+		if (this->begin == nullptr)
+		{
+			exception e("Empty list");
+			throw e;
+		}
+
+		if (index == 0)
+		{
+			Node<T>* new_begin = this->begin->getNext();
+			delete begin;
+			this->begin = new_begin;
+			this->begin->setPrevious(nullptr);
+			return;
+		}
+
+		int current_position = 0;
+		Node<T>* current_node = this->begin;
+
+		while (current_position != index and current_node != nullptr)
+		{
+			current_node = current_node->getNext();
+			current_position++;
+		}
+
+
+		if (index > current_position)
+		{
+			exception e("Error. Outside the list");
+			throw e;
+		}
+
+		if (current_node == this->begin)
+		{
+			Node<T>* prev = current_node->getPrevious();
+			prev->setNext(nullptr);
+			this->end = prev;
+			delete current_node;
+			return;
+		}
+
+		Node<T>* prev = current_node->getPrevious();
+		Node<T>* next = current_node->getNext();
+
+		prev->setNext(next);
+		next->setPrevious(prev);
+		delete current_node;
+	}
 	void print()
 	{
 		Node<T>* current = this->begin;
@@ -215,6 +274,16 @@ public:
 		{
 			cout << current->getValue() << "\n";
 			current = current->getNext();
+		}
+	}
+	void reverse_print()
+	{
+		Node<T>* current = this->end;
+
+		while (current != nullptr)
+		{
+			cout << current->getValue() << "\n";
+			current = current->getPrevious();
 		}
 	}
 	T front()
@@ -276,4 +345,13 @@ public:
 		
 		return true;
 	}
+	void operator=(initializer_list<T> l)
+	{
+		this->clear();
+		for (T element : l)
+		{
+			this->push_back(element);
+		}
+	}
 };
+
