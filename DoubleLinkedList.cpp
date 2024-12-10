@@ -197,7 +197,7 @@ public:
 			current_position++;
 		}
 
-		
+
 		if (index > current_position)
 		{
 			exception e("Error. Outside the list");
@@ -266,26 +266,18 @@ public:
 		next->setPrevious(prev);
 		delete current_node;
 	}
-	void print()
-	{
-		Node<T>* current = this->begin;
 
+	friend ostream& operator << (ostream& os, LinkedList<T>& list)
+	{
+		Node<T>* current = list.get_begin();
 		while (current != nullptr)
 		{
-			cout << current->getValue() << "\n";
+			os << current->getValue() << " ";
 			current = current->getNext();
 		}
+		return os;
 	}
-	void reverse_print()
-	{
-		Node<T>* current = this->end;
 
-		while (current != nullptr)
-		{
-			cout << current->getValue() << "\n";
-			current = current->getPrevious();
-		}
-	}
 	T front()
 	{
 		return this->begin->getValue();
@@ -342,7 +334,7 @@ public:
 			currentNode_other = currentNode_other->getNext();
 			currentNode_this = currentNode_this->getNext();
 		}
-		
+
 		return true;
 	}
 	void operator=(initializer_list<T> l)
@@ -354,4 +346,3 @@ public:
 		}
 	}
 };
-
